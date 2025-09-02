@@ -1,0 +1,46 @@
+# Byte-compiled / cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite and database files
+*.db
+*.sqlite3
+db.sqlite3.backup
+
+# Virtual environments
+venv/
+vnv/
+env/
+ENV/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# IDE/configuration files
+.vscode/
+.idea/
+
+# Egg info
+*.egg-info/
+
+# macOS files
+.DS_Store
+
+# Media and models (exclude folders but keep .gitkeep files)
+strees_dection/media/*
+!strees_dection/media/.gitkeep
+
+strees_dection/models/*
+!strees_dection/models/.gitkeep
+
+# Rasa cache
+strees_dection/.rasa/
+
+# Rasa credentials
+credentials.yml
+.env
