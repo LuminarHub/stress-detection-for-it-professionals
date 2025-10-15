@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+       
+    <meta charset="UTF-8" />
+       
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Stress Assessment Results</title>
+       
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+       
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <style>
+        body {
+            background: linear-gradient(135deg, #74ebd5, #acb6e5);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+            padding: 1rem;
+        }
+
+        .result-box {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .recommendations {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .recommendations ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        .recommendations li {
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: transform 0.2s ease-in-out;
+            display: inline-block;
+        }
+
+        .btn-custom:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .result-box {
+                padding: 1rem;
+                max-width: 98vw;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .btn-custom {
+                width: 100%;
+                font-size: 1rem;
+                margin: 0.5rem 0;
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+        <div class="result-box">
+                <h2>Assessment Results</h2>
+                {% if assessment %}
+                    <p><strong>Assessment Score:</strong> {{ assessment.stress_score }}</p>
+                    {% if assessment.recommendations %}
+                        <p><strong>Risk Level:</strong> {{ assessment.recommendations }}</p>
+                    {% endif %}
+                    {% if assessment.responses %}
+                        <p><strong>Your Responses:</strong> {{ assessment.responses }}</p>
+                    {% endif %}
+
+                    {# Embed or show Motivational Video if available #}
+                    {% if assessment.video_link %}
+                        <div class="mt-4">
+                                <h4>Motivational Video</h4>
+                                {% if "youtube.com/embed" in assessment.video_link %}
+                                    <iframe width="100%" height="315" src="{{ assessment.video_link }}" frameborder="0"
+                allowfullscreen style="border-radius: 10px;"></iframe>
+                                {% else %}
+                                    <a href="{{ assessment.video_link }}" target="_blank"
+                class="btn btn-primary btn-custom">Watch Video</a>
+                                {% endif %}
+                            </div>
+                    {% endif %}
+
+                    {# Motivational Text or Quote #}
+                    {% if assessment.motivation %}
+                        <div class="alert alert-warning mt-4" role="alert" style="white-space: pre-wrap;">
+                                {{ assessment.motivation }}
+                            </div>
+                    {% endif %}
+
+                    {# Spotify song link button #}
+                    {% if assessment.song_link %}
+                        <a href="{{ assessment.song_link }}" target="_blank" class="btn btn-success btn-custom"
+            style="background-color: #1db954; border-color: #1db954;">
+                                🎵 Listen on Spotify
+                      </a>
+                    {% endif %}
+
+                    {# Helpful Resources List if any #}
+                    {% if assessment.resources_list %}
+                        <div class="recommendations mt-4">
+                                <h4>Helpful Resources</h4>
+                                <ul>
+                                        {% for item in assessment.resources_list %}
+                                            <li>{{ item|linebreaks }}</li>
+                                        {% endfor %}
+                                    </ul>
+                            </div>
+                    {% endif %}
+                {% else %}
+                    <p class="error-message">No assessment data available.</p>
+                {% endif %}
+            </div>
+</body>
+
+</html>

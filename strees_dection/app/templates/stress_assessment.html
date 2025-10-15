@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StressGuard Pro | Stress Assessment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-link i {
+            font-size: 1.1rem;
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .hamburger:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 90px auto 2rem;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 90px;
+            height: calc(100vh - 110px);
+            overflow-y: auto;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .sidebar-item i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .sidebar-item.active {
+            box-shadow: 0 4px 6px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Form Content */
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .form-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+            width: 100%;
+            text-align: center;
+            margin-top: 1.5rem; /* Added to move button below */
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), #f74b9e);
+            box-shadow: 0 4px 15px rgba(247, 37, 133, 0.4);
+        }
+
+        .btn-accent:hover {
+            background: linear-gradient(135deg, #e61e7a, #f74b9e);
+            box-shadow: 0 6px 20px rgba(247, 37, 133, 0.6);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            transform: translateY(-150%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .mobile-menu-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .mobile-menu-item i {
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .main-container {
+                margin-top: 70px;
+                padding: 1rem;
+            }
+
+            .form-container {
+                padding: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/usershome" class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <span class="logo-text">StressGuard Pro</span>
+            </a>
+            <div class="nav-menu">
+                <div class="nav-item">
+                    <a href="/settings/" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="/userprofile/" class="nav-link">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="{% url 'submit_feedback' %}" class="nav-link">
+                        <i class="fas fa-comment-dots"></i>
+                        <span>Feedback</span>
+                    </a>
+                    
+                </div>
+                <div class="nav-item">
+                    <a href="/user_logout/" class="nav-link">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/settings/" class="mobile-menu-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+        <a href="/userprofile/" class="mobile-menu-item">
+            <i class="fas fa-user-circle"></i>
+            <span>Profile</span>
+        </a>
+        <a href="{% url 'submit_feedback' %}" class="nav-link">
+            <i class="fas fa-comment-dots"></i>
+            <span>Feedback</span>
+        </a>
+        
+        <a href="/user_logout/" class="mobile-menu-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-menu">
+                <a href="{% url 'user_dashboard' %}" class="sidebar-item ">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/stress_assessment/" class="sidebar-item active">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Wellness</span>
+                </a>
+                <a href="{% url 'post_keyboard_activity' %}" class="sidebar-item">
+                    <i class="fas fa-keyboard"></i>
+                    <span>Keyboard Data</span>
+                </a>
+                <a href="{% url 'post_screen_time' %}" class="sidebar-item">
+                    <i class="fas fa-desktop"></i>
+                    <span>Screen Time</span>
+                </a>
+                <a href="{% url 'post_application_usage' %}" class="sidebar-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>App Usage</span>
+                </a>
+                <a href="{% url 'post_voice_pattern' %}" class="sidebar-item">
+                    <i class="fas fa-microphone"></i>
+                    <span>Voice Analysis</span>
+                </a>
+                <a href="{% url 'post_wearable_data' %}" class="sidebar-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Wearable Data</span>
+                </a>
+                <a href="{% url 'data_collection_dashboard' %}" class="sidebar-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>History</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Form Content -->
+<main class="form-container animated">
+    <div class="form-header animated delay-1">
+        <div class="form-icon">
+            <i class="fas fa-heartbeat"></i>
+        </div>
+        <h1 class="form-title">Stress Assessment</h1>
+        <p class="form-subtitle">Mental Health Assessment powered by AI</p>
+    </div>
+
+    <!-- Conversation History -->
+    <div class="conversation-history" style="max-height: 400px; overflow-y: auto; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+        {% for message in conversation_history %}
+            {% if message.sender == 'user' %}
+                <div class="user-message" style="text-align: right; margin: 10px 0;">
+                    <span style="background: #4361ee; color: white; padding: 8px 12px; border-radius: 18px; display: inline-block;">
+                        {{ message.message }}
+                    </span>
+                </div>
+            {% else %}
+                <div class="bot-message" style="text-align: left; margin: 10px 0;">
+                    <span style="background: white; color: #333; padding: 8px 12px; border-radius: 18px; display: inline-block; border: 1px solid #e0e0e0;">
+                        {{ message.message|linebreaks }}
+                    </span>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {% if not is_assessment_complete %}
+        <!-- Current Question Form -->
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">{{ current_question }}</label>
+                
+                {% if current_options %}
+                    <!-- Show options as radio buttons -->
+                    {% for option in current_options %}
+                        <div class="option-item" style="margin: 10px 0;">
+                            <input type="radio" name="user_message" value="{{ option.number }}" id="option_{{ option.number }}" required>
+                            <label for="option_{{ option.number }}" style="margin-left: 8px;">
+                                {{ option.number }}. {{ option.text }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Text input for open-ended questions -->
+                    <input type="text" class="form-control" name="user_message" placeholder="Type your answer here" required>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    {% else %}
+
+    <div class="assessment-complete" style="text-align: center; padding: 20px;">
+    <h3>Assessment Complete!</h3>
+
+    {% if assessment_result %}
+        <div class="results" style="background: #f0f8f0; padding: 15px; border-radius: 10px; margin: 15px 0; text-align: left; white-space: pre-wrap;">
+            {{ assessment_result }}
+        </div>
+    {% endif %}
+
+    {% if video_link %}
+        <div style="margin: 15px 0;">
+            <h4>Motivational Video</h4>
+            {% if "youtube.com/embed" in video_link %}
+                <iframe width="100%" height="300" src="{{ video_link }}" frameborder="0" allowfullscreen style="border-radius: 10px;"></iframe>
+            {% else %}
+                <a href="{{ video_link }}" target="_blank" class="btn btn-primary" style="margin-top: 10px;">Watch Video</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if song_link %}
+        <div style="margin: 15px 0;">
+            <h4>Motivational Song</h4>
+            <a href="{{ song_link }}" target="_blank" class="btn" style="background-color: #1DB954; color: white; border-radius: 10px; padding: 10px 20px; text-decoration: none;">
+                🎵 Listen on Spotify
+            </a>
+        </div>
+    {% endif %}
+
+    {% if motivational_quote %}
+        <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 15px 0; color: #856404;">
+            {{ motivational_quote|linebreaks }}
+        </div>
+    {% endif %}
+
+    {% if resources_list %}
+        <div style="margin-top: 20px; text-align: left;">
+            <h4>Helpful Resources</h4>
+            <ul>
+                {% for resource in resources_list %}
+                    <li>{{ resource|linebreaks }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'stress_assessment' %}" class="btn" style="margin-top: 30px;">Take Assessment Again</a>
+</div>
+
+        <!-- Assessment Complete -->
+        <!-- <div class="assessment-complete" style="text-align: center; padding: 20px;">
+            <h3>Assessment Complete!</h3>
+            {% if assessment_result %}
+                <div class="results" style="background: #f0f8f0; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                    {{ assessment_result|linebreaks }}
+                </div>
+            {% endif %}
+            
+            {% if motivational_song %}
+                <div class="motivational-content" style="background: #fff3cd; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                    {{ motivational_song|linebreaks }}
+                </div>
+            {% endif %}
+            
+            <a href="{% url 'stress_assessment' %}" class="btn" style="margin-top: 20px;">Take Assessment Again</a>
+        </div> -->
+    {% endif %}
+</main>
+
+
+
+    <script>
+        // Mobile Menu Toggle
+        const hamburger = document.querySelector('.hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const overwhelmed = document.getElementById('overwhelmed').value;
+            const sleepQuality = document.getElementById('sleep_quality').value;
+            const anxiety = document.getElementById('anxiety').value;
+
+            if (!overwhelmed || !sleepQuality || !anxiety) {
+                e.preventDefault();
+                alert('Please select an option for all questions.');
+            }
+        });
+    </script>
+</body>
+</html>
